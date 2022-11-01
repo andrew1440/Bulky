@@ -19,5 +19,14 @@ namespace Bulky_Book2.wwwroot
             IEnumerable<Category> objCategoryList = _db.Categories;
             return View(objCategoryList);
         }
+        //GET
+        public IActionResult Create()
+
+        {
+            IEnumerable<Category> objCategoryList = _db.Categories;
+            return View();
+        }
     }
 }
+
+   
