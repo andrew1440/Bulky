@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Bulky_Book2.Models
 {
@@ -8,6 +9,8 @@ namespace Bulky_Book2.Models
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        [DisplayName("PhoneNumer")]
+        [Range(1,100,ErrorMessage = "Display Order must be between 1 and 100 only!!") ]
         public int PhoneNumber { get; set; }
         public int AddressofStudent { get; set; }
         public bool City { get; set; }

@@ -15,32 +15,68 @@ namespace Bulky_Book2.wwwroot
         }
 
         public IActionResult Index()
-            
+
         {
             IEnumerable<Category> objCategoryList = _db.Categories;
             return View(objCategoryList);
         }
         //GET
         public IActionResult Create()
-
         {
-            IEnumerable<Category> objCategoryList = _db.Categories;
             return View();
         }
 
-        public Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary GetModelState()
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Category obj)
         {
-            return ModelState;
+            if (obj.Name == obj.PhoneNumber.ToString())
+            {
+                ModelState.AddModelError("name", "The PhoneNumber cannot exactly match the Name.");
+            }
+            if (ModelState.IsValid)
+            {
+                _db.Categories.Add(obj);
+                _db.SaveChanges();
+                TempData["success"] = "Category created successfully";
+                return RedirectToAction("Index");
+            }
+            return View(obj);
         }
 
-        //POST
-        [HttpPost ]
-        [ValidateAntiForgeryToken ]
-        public IActionResult Create(Category obj, Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary modelState)
+
+        //GET
+        public IActionResult Edit(int? id)
+
         {
+            if (id == null || id == 0)
+            { 
+                return NotFound();
+            }
+            var  categoryFromDb = _db.Categories.Find(id);
+            //var categoryFromDbFirst = _db.Categories.FirstOrDefault(u => u.Id == id);
+            //var categoryFromDbSingle = _db.Categories.SingleOrDefault(u => u.Id == id);
+
+            if (categoryFromDb == null)
+            {
+                return NotFound();
+            }
+            return View(categoryFromDb);
+        }
+
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Category obj, Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary modelState)
+        {
+            if (obj.Name == obj.PhoneNumber.ToString())
+            {
+                ModelState.AddModelError("name", "The PhoneNumber cannot exactly match the Name.");
+            }
             if (!modelState.IsValid)
             {
-
                 _db.Categories.Add(obj);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
@@ -51,6 +87,7 @@ namespace Bulky_Book2.wwwroot
 
     }
 
+
+
 }
 
-   
