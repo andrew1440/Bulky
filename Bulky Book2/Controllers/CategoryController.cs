@@ -1,6 +1,7 @@
 ﻿using Bulky_Book2.Data;
 using Bulky_Book2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Bulky_Book2.wwwroot
 {
@@ -26,7 +27,30 @@ namespace Bulky_Book2.wwwroot
             IEnumerable<Category> objCategoryList = _db.Categories;
             return View();
         }
+
+        public Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary GetModelState()
+        {
+            return ModelState;
+        }
+
+        //POST
+        [HttpPost ]
+        [ValidateAntiForgeryToken ]
+        public IActionResult Create(Category obj, Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary modelState)
+        {
+            if (!modelState.IsValid)
+            {
+
+                _db.Categories.Add(obj);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(obj);
+        }
+
     }
+
 }
 
    
