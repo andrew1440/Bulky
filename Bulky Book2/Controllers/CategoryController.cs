@@ -69,19 +69,19 @@ namespace Bulky_Book2.wwwroot
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Category obj, Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary modelState)
+        public IActionResult Edit(Category obj)
         {
             if (obj.Name == obj.PhoneNumber.ToString())
             {
                 ModelState.AddModelError("name", "The PhoneNumber cannot exactly match the Name.");
             }
-            if (!modelState.IsValid)
+            if (ModelState.IsValid)
             {
-                _db.Categories.Add(obj);
+                _db.Categories.Update(obj);
                 _db.SaveChanges();
+                TempData["success"] = "Category updated successfully";
                 return RedirectToAction("Index");
             }
-
             return View(obj);
         }
 
